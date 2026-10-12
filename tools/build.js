@@ -1,0 +1,1 @@
+const fs=require('fs');const path=require('path');const root=path.resolve(__dirname,'..');fs.mkdirSync(path.join(root,'dist'),{recursive:true});fs.copyFileSync(path.join(root,'index.js'),path.join(root,'dist/index.js'));console.log('Frontend copied to dist/index.js');

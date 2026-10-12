@@ -1,0 +1,9 @@
+{
+  "name": "hhd-decky-steamos-ally",
+  "version": "0.2.0-local.2",
+  "private": true,
+  "scripts": {
+    "build": "node tools/build.js",
+    "test": "python -m unittest discover -s tests && node tests/test_frontend.js"
+  }
+}

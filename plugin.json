@@ -1,0 +1,12 @@
+{
+  "name": "Handheld Daemon",
+  "author": "Local HHD integration",
+  "flags": [
+    "root"
+  ],
+  "publish": {
+    "tags": [],
+    "description": "Decky frontend for hhd (Handheld Daemon)",
+    "image": "https://opengraph.githubassets.com/1/SteamDeckHomebrew/PluginLoader"
+  }
+}

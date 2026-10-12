@@ -1,0 +1,224 @@
+{
+  "tdp": {
+    "asus": {
+      "tdp_v2": {
+        "mode": "balanced",
+        "quiet": {},
+        "balanced": {},
+        "performance": {},
+        "custom": {
+          "tdp": 15,
+          "boost": true
+        }
+      },
+      "sys_tdp": null,
+      "cycle_tdp": false,
+      "fan": {
+        "mode": "disabled",
+        "disabled": {},
+        "manual": {
+          "st30": 5,
+          "st40": 10,
+          "st50": 20,
+          "st60": 35,
+          "st70": 55,
+          "st80": 75,
+          "st90": 75,
+          "st100": 75,
+          "reset": null,
+          "disclaimer": "Asus hardware limits the minimum fan curve depending on TDP mode."
+        }
+      }
+    },
+    "amd_energy": {
+      "mode": {
+        "mode": "auto",
+        "auto": {},
+        "manual": {
+          "cpu_pref": "balance_power",
+          "cpu_min_freq": "min",
+          "cpu_boost": "enabled",
+          "sched": "disabled"
+        }
+      },
+      "gpu_freq": {
+        "mode": "auto",
+        "auto": {},
+        "upper": {
+          "frequency": 2700
+        },
+        "range": {
+          "min": 800,
+          "max": 2700
+        },
+        "manual": {
+          "frequency": 1700
+        }
+      }
+    },
+    "battery": {
+      "charge_limit": "disabled"
+    }
+  },
+  "rgb": {
+    "handheld": {
+      "mode": {
+        "mode": "solid",
+        "disabled": {},
+        "solid": {
+          "hue": 195,
+          "saturation": 100,
+          "brightness": 50
+        },
+        "pulse": {
+          "hue": 195,
+          "saturation": 100,
+          "brightness": 50,
+          "speedd": "medium"
+        },
+        "duality": {
+          "hue": 60,
+          "hue2": 30,
+          "saturation": 100,
+          "brightness": 50,
+          "speedd": "medium"
+        },
+        "rainbow": {
+          "brightnessd": "medium"
+        },
+        "spiral": {
+          "brightnessd": "medium",
+          "speedd": "medium",
+          "direction": "left"
+        }
+      }
+    }
+  },
+  "controllers": {
+    "rog_ally": {
+      "controller_mode": {
+        "mode": "uinput",
+        "hidden": {
+          "info": "Disables the built-in controller.\nExternal controllers will be slot 1.\nOverlay will still work.\n",
+          "noob_mode": true
+        },
+        "uinput": {
+          "info": "Simple Xbox controller. \nUniversal compatibility.\nExtra buttons are shortcuts or Steam Input.\n",
+          "paddles_as": "noob",
+          "nintendo_qam": false
+        },
+        "xbox_elite": {
+          "info": "Extra buttons in Steam Input.\n"
+        },
+        "dualsense": {
+          "info": "Touchpad, gyro, and RGB support. Extra buttons are remappable.\n",
+          "paddles_as": "steam_input",
+          "led_support": false,
+          "sync_gyro": true,
+          "flip_z": true,
+          "bluetooth_mode": true
+        }
+      },
+      "swap_armory": false,
+      "imu": true,
+      "imu_hz": 200,
+      "limits": {
+        "mode": "default",
+        "default": {},
+        "manual": {
+          "vibration": 100,
+          "ls_min": 5,
+          "ls_max": 64,
+          "rs_min": 5,
+          "rs_max": 64,
+          "lt_min": 5,
+          "lt_max": 64,
+          "rt_min": 5,
+          "rt_max": 64,
+          "reset": null
+        }
+      },
+      "select_reboots": false,
+      "nintendo_mode": false,
+      "rgb_boot": false,
+      "rgb_charging": false
+    }
+  },
+  "magic_modules": {},
+  "wincontrols": {},
+  "gamemode": {
+    "power": {
+      "status": null,
+      "reboot_windows": null,
+      "hibernate": null,
+      "hibernate_auto": true
+    },
+    "display": {
+      "touchscreen_disable": null,
+      "gestures_disable": null
+    },
+    "gamescope": {}
+  },
+  "updates": {},
+  "debug": {},
+  "shortcuts": {
+    "custom": {},
+    "controller": {
+      "xbox_y": "tdp_cycle",
+      "xbox_b": "hhd_expanded",
+      "xbox_a": "disabled",
+      "xbox_x": "disabled",
+      "allow_select": true
+    },
+    "touchscreen": {
+      "bottom": "keyboard",
+      "right_top": "hhd_qam",
+      "right_bottom": "steam_qam",
+      "left_top": "hhd_expanded",
+      "left_bottom": "steam_expanded",
+      "top": "disabled"
+    },
+    "keyboard": {
+      "meta_press": "disabled",
+      "meta_hold": "disabled",
+      "ctrl_3": "hhd_expanded",
+      "ctrl_4": "hhd_qam"
+    }
+  },
+  "hhd": {
+    "settings": {
+      "language": "system",
+      "theme": "default",
+      "reset": null,
+      "version": null,
+      "version_ui": null,
+      "update_stable": null,
+      "update_beta": null,
+      "update_error": null,
+      "tdp_ready": null,
+      "tdp_enable": false,
+      "enforce_limits": true,
+      "amd_energy_enable": true,
+      "amd_energy_ppd": true,
+      "rgb": true,
+      "powerbuttond": true
+    },
+    "http": {
+      "localhost": true,
+      "token": true
+    },
+    "steamos": {
+      "tdp_status": null,
+      "tdp_min": null,
+      "tdp_default": null,
+      "tdp_max": null,
+      "tdp_set": null,
+      "gpu_status": null,
+      "gpu_min": null,
+      "gpu_max": null,
+      "gpu_set": false
+    },
+    "version": null
+  },
+  "version": "fixture-1"
+}

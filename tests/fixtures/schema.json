@@ -1,0 +1,2050 @@
+{
+  "tdp": {
+    "asus": {
+      "type": "container",
+      "title": "华硕 TDP",
+      "hint": "使用 Armory Crate 的接口设置设备的 TDP。",
+      "unit": "",
+      "tags": [
+        "hide-title"
+      ],
+      "default": null,
+      "children": {
+        "tdp_v2": {
+          "type": "mode",
+          "title": "TDP 模式",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "balanced",
+          "modes": {
+            "quiet": {
+              "type": "container",
+              "title": "静音",
+              "hint": "",
+              "unit": "10W",
+              "tags": [],
+              "default": null,
+              "children": {}
+            },
+            "balanced": {
+              "type": "container",
+              "title": "性能",
+              "hint": "",
+              "unit": "15W",
+              "tags": [],
+              "default": null,
+              "children": {}
+            },
+            "performance": {
+              "type": "container",
+              "title": "Turbo",
+              "hint": "",
+              "unit": "25W/30W",
+              "tags": [],
+              "default": null,
+              "children": {}
+            },
+            "custom": {
+              "type": "container",
+              "title": "自定义",
+              "hint": "",
+              "unit": "→ 25W/30W",
+              "tags": [],
+              "default": null,
+              "children": {
+                "tdp": {
+                  "type": "int",
+                  "title": "TDP",
+                  "hint": "平均 TDP 目标。TDP Boost 适合桌面工作负载，对游戏性能无负面影响。",
+                  "unit": "W",
+                  "tags": [],
+                  "default": 15,
+                  "min": 5,
+                  "max": 30,
+                  "step": 1,
+                  "smin": null,
+                  "smax": null
+                },
+                "boost": {
+                  "type": "bool",
+                  "title": "TDP 增强",
+                  "hint": "允许设备通过设置适当的 slow 和 fast TDP 值来提升性能。",
+                  "unit": "",
+                  "tags": [],
+                  "default": true
+                }
+              }
+            }
+          }
+        },
+        "sys_tdp": {
+          "type": "display",
+          "title": " ",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": null
+        },
+        "cycle_tdp": {
+          "type": "bool",
+          "title": "使用 View+Y 更改 TDP",
+          "hint": "允许您使用 View+Y 组合键在 TDP 模式之间循环。建议与 ROG Swap 一起使用，因为 View 按钮在游戏中会被屏蔽。",
+          "unit": "",
+          "tags": [
+            "non-essential"
+          ],
+          "default": false
+        },
+        "fan": {
+          "type": "mode",
+          "title": "自定义风扇曲线",
+          "hint": "允许您自定义风扇转速曲线。",
+          "unit": "",
+          "tags": [],
+          "default": "disabled",
+          "modes": {
+            "disabled": {
+              "type": "container",
+              "title": "禁用",
+              "hint": "由设备自动管理风扇曲线。",
+              "unit": "",
+              "tags": [],
+              "default": null,
+              "children": {}
+            },
+            "manual": {
+              "type": "container",
+              "title": "手动",
+              "hint": "",
+              "unit": "",
+              "tags": [
+                "non-essential"
+              ],
+              "default": null,
+              "children": {
+                "st30": {
+                  "type": "int",
+                  "title": "30°C",
+                  "hint": "设置在指定温度下的风扇速度。",
+                  "unit": "%",
+                  "tags": [
+                    "slim"
+                  ],
+                  "default": 5,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "st40": {
+                  "type": "int",
+                  "title": "40°C",
+                  "hint": "设置在指定温度下的风扇速度。",
+                  "unit": "%",
+                  "tags": [
+                    "slim"
+                  ],
+                  "default": 10,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "st50": {
+                  "type": "int",
+                  "title": "50°C",
+                  "hint": "设置在指定温度下的风扇速度。",
+                  "unit": "%",
+                  "tags": [
+                    "slim"
+                  ],
+                  "default": 20,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "st60": {
+                  "type": "int",
+                  "title": "60°C",
+                  "hint": "设置在指定温度下的风扇速度。",
+                  "unit": "%",
+                  "tags": [
+                    "slim"
+                  ],
+                  "default": 35,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "st70": {
+                  "type": "int",
+                  "title": "70°C",
+                  "hint": "设置在指定温度下的风扇速度。",
+                  "unit": "%",
+                  "tags": [
+                    "slim"
+                  ],
+                  "default": 55,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "st80": {
+                  "type": "int",
+                  "title": "80°C",
+                  "hint": "设置在指定温度下的风扇速度。",
+                  "unit": "%",
+                  "tags": [
+                    "slim"
+                  ],
+                  "default": 75,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "st90": {
+                  "type": "int",
+                  "title": "90°C",
+                  "hint": "设置在指定温度下的风扇速度。",
+                  "unit": "%",
+                  "tags": [
+                    "slim"
+                  ],
+                  "default": 75,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "st100": {
+                  "type": "int",
+                  "title": "100°C",
+                  "hint": "设置在指定温度下的风扇速度。",
+                  "unit": "%",
+                  "tags": [
+                    "slim"
+                  ],
+                  "default": 75,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "reset": {
+                  "type": "action",
+                  "title": "恢复默认",
+                  "hint": "恢复默认的风扇曲线",
+                  "unit": "",
+                  "tags": [],
+                  "default": null
+                },
+                "disclaimer": {
+                  "type": "display",
+                  "title": "风扇曲线限制",
+                  "hint": "",
+                  "unit": "",
+                  "tags": [],
+                  "default": "Asus hardware limits the minimum fan curve depending on TDP mode."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "amd_energy": {
+      "type": "container",
+      "title": "处理器设置",
+      "hint": "",
+      "unit": "",
+      "tags": [
+        "hide-title",
+        "non-essential"
+      ],
+      "default": null,
+      "children": {
+        "mode": {
+          "type": "mode",
+          "title": "CPU 设置",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "auto",
+          "modes": {
+            "auto": {
+              "type": "container",
+              "title": "自动",
+              "hint": "Handheld Daemon 将管理能源管理设置。包括 CPU 调速器、CPU boost、GPU 频率和电源管理策略。在低 TDP 下，CPU 性能将被降低；在其他 TDP 下，将使用平衡设置。",
+              "unit": "",
+              "tags": [
+                "non-essential"
+              ],
+              "default": null,
+              "children": {}
+            },
+            "manual": {
+              "type": "container",
+              "title": "手动",
+              "hint": "允许手动配置能源管理参数。",
+              "unit": "",
+              "tags": [
+                "non-essential"
+              ],
+              "default": null,
+              "children": {
+                "cpu_pref": {
+                  "type": "multiple",
+                  "title": "CPU电源(EPP)",
+                  "hint": "设置 CPU 的能源性能偏好。建议保持平衡模式以在所有 TDP 下获得最佳性能。选项对应 `power`、`balance_power`、`balance_performance`。不包含 Performance 模式（不推荐使用）。",
+                  "unit": "",
+                  "tags": [
+                    "ordinal"
+                  ],
+                  "default": "balance_power",
+                  "options": {
+                    "power": "低",
+                    "balance_power": "均衡",
+                    "balance_performance": "高"
+                  }
+                },
+                "cpu_min_freq": {
+                  "type": "multiple",
+                  "title": "CPU 最小频率",
+                  "hint": "设置 CPU 的最小运行频率。使用 400MHz 可在轻度游戏中节省电池电量。但频率提升延迟可能在 VRR 显示器上造成轻微卡顿。",
+                  "unit": "",
+                  "tags": [
+                    "ordinal",
+                    "expert"
+                  ],
+                  "default": "min",
+                  "options": {
+                    "min": "400MHz",
+                    "nonlinear": "1GHz"
+                  }
+                },
+                "cpu_boost": {
+                  "type": "multiple",
+                  "title": "CPU 加速",
+                  "hint": "启用或禁用 CPU boost 频率。禁用可降低约 2W 功耗，对性能影响轻微。",
+                  "unit": "",
+                  "tags": [
+                    "ordinal"
+                  ],
+                  "default": "enabled",
+                  "options": {
+                    "disabled": "禁用",
+                    "enabled": "启用"
+                  }
+                },
+                "sched": {
+                  "type": "multiple",
+                  "title": "自定义调度器",
+                  "hint": "允许将自定义调度器附加到内核的 sched_ext。需要先安装调度器，且内核必须支持 sched_ext。",
+                  "unit": "",
+                  "tags": [],
+                  "default": "disabled",
+                  "options": {
+                    "disabled": "禁用",
+                    "scx_lavd": "LAVD"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "gpu_freq": {
+          "type": "mode",
+          "title": "GPU 频率",
+          "hint": "将 GPU 锁定在特定频率。在 CPU 或 GPU 负载较重的游戏中，通过调整 GPU 的功耗分配来提供帮助，但效果较小",
+          "unit": "",
+          "tags": [],
+          "default": "auto",
+          "modes": {
+            "auto": {
+              "type": "container",
+              "title": "自动",
+              "hint": "GPU 自行管理其频率。",
+              "unit": "",
+              "tags": [],
+              "default": null,
+              "children": {}
+            },
+            "upper": {
+              "type": "container",
+              "title": "最大限制",
+              "hint": "限制 GPU 的最大频率。",
+              "unit": "",
+              "tags": [],
+              "default": null,
+              "children": {
+                "frequency": {
+                  "type": "int",
+                  "title": "最大频率",
+                  "hint": "",
+                  "unit": "MHz",
+                  "tags": [],
+                  "default": 2700,
+                  "min": 800,
+                  "max": 2700,
+                  "step": 100,
+                  "smin": null,
+                  "smax": null
+                }
+              }
+            },
+            "range": {
+              "type": "container",
+              "title": "范围",
+              "hint": "将 GPU 频率设置为一个范围。",
+              "unit": "",
+              "tags": [],
+              "default": null,
+              "children": {
+                "min": {
+                  "type": "int",
+                  "title": "最小频率",
+                  "hint": "",
+                  "unit": "MHz",
+                  "tags": [],
+                  "default": 800,
+                  "min": 800,
+                  "max": 2700,
+                  "step": 100,
+                  "smin": null,
+                  "smax": null
+                },
+                "max": {
+                  "type": "int",
+                  "title": "最大频率",
+                  "hint": "",
+                  "unit": "MHz",
+                  "tags": [],
+                  "default": 2700,
+                  "min": 800,
+                  "max": 2700,
+                  "step": 100,
+                  "smin": null,
+                  "smax": null
+                }
+              }
+            },
+            "manual": {
+              "type": "container",
+              "title": "固定",
+              "hint": "将 GPU 固定在某个频率 (不推荐)。",
+              "unit": "",
+              "tags": [],
+              "default": null,
+              "children": {
+                "frequency": {
+                  "type": "int",
+                  "title": "频率",
+                  "hint": "",
+                  "unit": "MHz",
+                  "tags": [],
+                  "default": 1700,
+                  "min": 800,
+                  "max": 2700,
+                  "step": 100,
+                  "smin": null,
+                  "smax": null
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "battery": {
+      "type": "container",
+      "title": "电池设置",
+      "hint": "",
+      "unit": "",
+      "tags": [
+        "hide-title"
+      ],
+      "default": null,
+      "children": {
+        "charge_limit": {
+          "type": "multiple",
+          "title": "充电限制 (%)",
+          "hint": "对电池应用充电限制，75% 及以上。",
+          "unit": "",
+          "tags": [
+            "non-essential",
+            "ordinal"
+          ],
+          "default": "disabled",
+          "options": {
+            "p70": "70%",
+            "p80": "80%",
+            "p85": "85%",
+            "p90": "90%",
+            "p95": "95%",
+            "disabled": "不限"
+          }
+        }
+      }
+    }
+  },
+  "rgb": {
+    "handheld": {
+      "type": "container",
+      "title": "RGB 设置",
+      "hint": "",
+      "unit": "",
+      "tags": [
+        "hide-title"
+      ],
+      "default": null,
+      "children": {
+        "mode": {
+          "type": "mode",
+          "title": "RGB 模式",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "solid",
+          "modes": {
+            "disabled": {
+              "type": "container",
+              "title": "关闭",
+              "hint": "关闭 LED 灯",
+              "unit": "",
+              "tags": [
+                "non-essential",
+                "rgb",
+                "disabled"
+              ],
+              "default": null,
+              "children": {}
+            },
+            "solid": {
+              "type": "container",
+              "title": "固定",
+              "hint": "保持 LED 灯为固定颜色",
+              "unit": "",
+              "tags": [
+                "non-essential",
+                "rgb",
+                "solid"
+              ],
+              "default": null,
+              "children": {
+                "hue": {
+                  "type": "int",
+                  "title": "色调",
+                  "hint": "",
+                  "unit": "°",
+                  "tags": [
+                    "hue",
+                    "non-essential",
+                    "rgb",
+                    "solid"
+                  ],
+                  "default": 195,
+                  "min": 0,
+                  "max": 360,
+                  "step": 5,
+                  "smin": null,
+                  "smax": null
+                },
+                "saturation": {
+                  "type": "int",
+                  "title": "饱和度",
+                  "hint": "",
+                  "unit": "%",
+                  "tags": [
+                    "non-essential",
+                    "rgb",
+                    "saturation",
+                    "solid"
+                  ],
+                  "default": 100,
+                  "min": 0,
+                  "max": 100,
+                  "step": 10,
+                  "smin": null,
+                  "smax": null
+                },
+                "brightness": {
+                  "type": "int",
+                  "title": "亮度",
+                  "hint": "",
+                  "unit": "%",
+                  "tags": [
+                    "brightness",
+                    "non-essential",
+                    "rgb",
+                    "solid"
+                  ],
+                  "default": 50,
+                  "min": 0,
+                  "max": 100,
+                  "step": 10,
+                  "smin": null,
+                  "smax": null
+                }
+              }
+            },
+            "pulse": {
+              "type": "container",
+              "title": "呼吸",
+              "hint": "LED 按照预设颜色缓慢呼吸",
+              "unit": "",
+              "tags": [
+                "non-essential",
+                "rgb",
+                "pulse"
+              ],
+              "default": null,
+              "children": {
+                "hue": {
+                  "type": "int",
+                  "title": "色调",
+                  "hint": "",
+                  "unit": "°",
+                  "tags": [
+                    "hue",
+                    "non-essential",
+                    "pulse",
+                    "rgb"
+                  ],
+                  "default": 195,
+                  "min": 0,
+                  "max": 360,
+                  "step": 5,
+                  "smin": null,
+                  "smax": null
+                },
+                "saturation": {
+                  "type": "int",
+                  "title": "饱和度",
+                  "hint": "",
+                  "unit": "%",
+                  "tags": [
+                    "non-essential",
+                    "pulse",
+                    "rgb",
+                    "saturation"
+                  ],
+                  "default": 100,
+                  "min": 0,
+                  "max": 100,
+                  "step": 10,
+                  "smin": null,
+                  "smax": null
+                },
+                "brightness": {
+                  "type": "int",
+                  "title": "亮度",
+                  "hint": "",
+                  "unit": "%",
+                  "tags": [
+                    "brightness",
+                    "non-essential",
+                    "pulse",
+                    "rgb"
+                  ],
+                  "default": 50,
+                  "min": 0,
+                  "max": 100,
+                  "step": 10,
+                  "smin": null,
+                  "smax": null
+                },
+                "speedd": {
+                  "type": "multiple",
+                  "title": "速度",
+                  "hint": "",
+                  "unit": "",
+                  "tags": [
+                    "non-essential",
+                    "ordinal",
+                    "pulse",
+                    "rgb"
+                  ],
+                  "default": "medium",
+                  "options": {
+                    "low": "低",
+                    "medium": "中",
+                    "high": "高"
+                  }
+                }
+              }
+            },
+            "duality": {
+              "type": "container",
+              "title": "双色",
+              "hint": "在两种颜色之间交替",
+              "unit": "",
+              "tags": [
+                "non-essential",
+                "rgb",
+                "duality"
+              ],
+              "default": null,
+              "children": {
+                "hue": {
+                  "type": "int",
+                  "title": "色调",
+                  "hint": "",
+                  "unit": "°",
+                  "tags": [
+                    "duality",
+                    "hue",
+                    "non-essential",
+                    "rgb"
+                  ],
+                  "default": 60,
+                  "min": 0,
+                  "max": 360,
+                  "step": 5,
+                  "smin": null,
+                  "smax": null
+                },
+                "hue2": {
+                  "type": "int",
+                  "title": "次要",
+                  "hint": "",
+                  "unit": "°",
+                  "tags": [
+                    "duality",
+                    "hue2",
+                    "non-essential",
+                    "rgb"
+                  ],
+                  "default": 30,
+                  "min": 0,
+                  "max": 360,
+                  "step": 5,
+                  "smin": null,
+                  "smax": null
+                },
+                "saturation": {
+                  "type": "int",
+                  "title": "饱和度",
+                  "hint": "",
+                  "unit": "%",
+                  "tags": [
+                    "duality",
+                    "non-essential",
+                    "rgb",
+                    "saturation"
+                  ],
+                  "default": 100,
+                  "min": 0,
+                  "max": 100,
+                  "step": 10,
+                  "smin": null,
+                  "smax": null
+                },
+                "brightness": {
+                  "type": "int",
+                  "title": "亮度",
+                  "hint": "",
+                  "unit": "%",
+                  "tags": [
+                    "brightness",
+                    "duality",
+                    "non-essential",
+                    "rgb"
+                  ],
+                  "default": 50,
+                  "min": 0,
+                  "max": 100,
+                  "step": 10,
+                  "smin": null,
+                  "smax": null
+                },
+                "speedd": {
+                  "type": "multiple",
+                  "title": "速度",
+                  "hint": "",
+                  "unit": "",
+                  "tags": [
+                    "duality",
+                    "non-essential",
+                    "ordinal",
+                    "rgb"
+                  ],
+                  "default": "medium",
+                  "options": {
+                    "low": "低",
+                    "medium": "中",
+                    "high": "高"
+                  }
+                }
+              }
+            },
+            "rainbow": {
+              "type": "container",
+              "title": "彩虹",
+              "hint": "循环显示不同颜色",
+              "unit": "",
+              "tags": [
+                "non-essential",
+                "rainbow"
+              ],
+              "default": null,
+              "children": {
+                "brightnessd": {
+                  "type": "multiple",
+                  "title": "亮度",
+                  "hint": "",
+                  "unit": "",
+                  "tags": [
+                    "non-essential",
+                    "ordinal",
+                    "rainbow"
+                  ],
+                  "default": "medium",
+                  "options": {
+                    "low": "低",
+                    "medium": "中",
+                    "high": "高"
+                  }
+                }
+              }
+            },
+            "spiral": {
+              "type": "container",
+              "title": "螺旋",
+              "hint": "在摇杆周围创建一个 RGB 螺旋",
+              "unit": "",
+              "tags": [
+                "non-essential",
+                "spiral"
+              ],
+              "default": null,
+              "children": {
+                "brightnessd": {
+                  "type": "multiple",
+                  "title": "亮度",
+                  "hint": "",
+                  "unit": "",
+                  "tags": [
+                    "non-essential",
+                    "ordinal",
+                    "spiral"
+                  ],
+                  "default": "medium",
+                  "options": {
+                    "low": "低",
+                    "medium": "中",
+                    "high": "高"
+                  }
+                },
+                "speedd": {
+                  "type": "multiple",
+                  "title": "速度",
+                  "hint": "",
+                  "unit": "",
+                  "tags": [
+                    "non-essential",
+                    "ordinal",
+                    "spiral"
+                  ],
+                  "default": "medium",
+                  "options": {
+                    "low": "低",
+                    "medium": "中",
+                    "high": "高"
+                  }
+                },
+                "direction": {
+                  "type": "multiple",
+                  "title": "方向",
+                  "hint": "",
+                  "unit": "",
+                  "tags": [
+                    "non-essential",
+                    "ordinal",
+                    "spiral"
+                  ],
+                  "default": "left",
+                  "options": {
+                    "left": "左",
+                    "right": "右"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "controllers": {
+    "rog_ally": {
+      "type": "container",
+      "title": "Ally 控制器",
+      "hint": "可以配置您的 ROG Ally 控制器为统一设备输出",
+      "unit": "",
+      "tags": [
+        "lgc"
+      ],
+      "default": null,
+      "children": {
+        "controller_mode": {
+          "type": "mode",
+          "title": "控制器模拟",
+          "hint": "模拟不同类型的控制器, 以融合 ROG 设备的特性",
+          "unit": "",
+          "tags": [
+            "rog_controller_mode"
+          ],
+          "default": "uinput",
+          "modes": {
+            "hidden": {
+              "type": "container",
+              "title": "隐藏",
+              "hint": "禁用控制器。Handheld Daemon 叠加仍然可以在游戏模式下工作",
+              "unit": "",
+              "tags": [
+                "lgc_emulation_disabled"
+              ],
+              "default": null,
+              "children": {
+                "info": {
+                  "type": "display",
+                  "title": "",
+                  "hint": "",
+                  "unit": "",
+                  "tags": [
+                    "non-essential"
+                  ],
+                  "default": "Disables the built-in controller.\nExternal controllers will be slot 1.\nOverlay will still work.\n"
+                },
+                "noob_mode": {
+                  "type": "bool",
+                  "title": "扩展按钮作为键盘/叠加菜单快捷键",
+                  "hint": "左侧扩展按钮呼出键盘，右侧扩展按钮呼出叠加层。",
+                  "unit": "",
+                  "tags": [
+                    "non-essential"
+                  ],
+                  "default": true
+                }
+              }
+            },
+            "uinput": {
+              "type": "container",
+              "title": "Xbox",
+              "hint": "",
+              "unit": "",
+              "tags": [
+                "uinput"
+              ],
+              "default": null,
+              "children": {
+                "info": {
+                  "type": "display",
+                  "title": "",
+                  "hint": "",
+                  "unit": "",
+                  "tags": [
+                    "non-essential"
+                  ],
+                  "default": "Simple Xbox controller. \nUniversal compatibility.\nExtra buttons are shortcuts or Steam Input.\n"
+                },
+                "paddles_as": {
+                  "type": "multiple",
+                  "title": "扩展按钮功能",
+                  "hint": "配置扩展按钮功能。可以将左键设为呼出键盘，右键设为呼出叠加层，或者设置为 Steam 输入。",
+                  "unit": "",
+                  "tags": [
+                    "non-essential"
+                  ],
+                  "default": "noob",
+                  "options": {
+                    "steam_input": "Steam 输入 (Elite)",
+                    "noob": "键盘/叠加层",
+                    "disabled": "禁用"
+                  }
+                },
+                "nintendo_qam": {
+                  "type": "bool",
+                  "title": "任天堂 QAM 修复",
+                  "hint": "",
+                  "unit": "",
+                  "tags": [
+                    "advanced",
+                    "expert"
+                  ],
+                  "default": false
+                }
+              }
+            },
+            "xbox_elite": {
+              "type": "container",
+              "title": "Xbox 精英手柄",
+              "hint": "",
+              "unit": "",
+              "tags": [
+                "xbox_elite"
+              ],
+              "default": null,
+              "children": {
+                "info": {
+                  "type": "display",
+                  "title": "",
+                  "hint": "",
+                  "unit": "",
+                  "tags": [
+                    "non-essential"
+                  ],
+                  "default": "Extra buttons in Steam Input.\n"
+                }
+              }
+            },
+            "dualsense": {
+              "type": "container",
+              "title": "Dualsense",
+              "hint": "",
+              "unit": "",
+              "tags": [
+                "lgc_emulation_dualsense",
+                "dualsense",
+                "non-essential"
+              ],
+              "default": null,
+              "children": {
+                "info": {
+                  "type": "display",
+                  "title": "",
+                  "hint": "",
+                  "unit": "",
+                  "tags": [
+                    "non-essential"
+                  ],
+                  "default": "Touchpad, gyro, and RGB support. Extra buttons are remappable.\n"
+                },
+                "paddles_as": {
+                  "type": "multiple",
+                  "title": "扩展按钮功能",
+                  "hint": "配置扩展按钮功能。可以将左键设为呼出键盘，右键设为呼出叠加层；或者设置为触摸板左右点击。在 Legion Go 上，顶部按钮用作快捷键，底部按钮用作触摸板点击。",
+                  "unit": "",
+                  "tags": [],
+                  "default": "steam_input",
+                  "options": {
+                    "steam_input": "Steam 输入 (Edge)",
+                    "noob": "键盘/叠加层",
+                    "touchpad": "触摸板点击",
+                    "disabled": "禁用"
+                  }
+                },
+                "led_support": {
+                  "type": "bool",
+                  "title": "LED 支持",
+                  "hint": "将设备的 LED 灯光直接映射到控制器，让游戏和 Steam 可以直接控制灯光效果",
+                  "unit": "",
+                  "tags": [],
+                  "default": false
+                },
+                "sync_gyro": {
+                  "type": "bool",
+                  "title": "陀螺仪输出同步",
+                  "hint": "Steam 在处理触摸板鼠标和`陀螺仪到鼠标 [BETA]`功能时依赖 IMU 时间戳。如果在 2 个报告中发送相同的时间戳, 这会导致除以 0 造成不稳定。此选项使报告仅在有新的 IMU 时间戳时发送, 有效地将控制器的响应速度限制为 IMU 的速度。这只对 Legion Go (125hz) 有影响, 因为所有其他掌机默认使用 400hz",
+                  "unit": "",
+                  "tags": [],
+                  "default": true
+                },
+                "flip_z": {
+                  "type": "bool",
+                  "title": "反转滚动轴",
+                  "hint": "相对于真实的 DualSense 控制器反转滚动轴（Z轴）。在 Steam 输入中这很有用，因为反转后更符合左右视角移动的习惯，但在模拟器中可能会造成问题",
+                  "unit": "",
+                  "tags": [],
+                  "default": true
+                },
+                "bluetooth_mode": {
+                  "type": "bool",
+                  "title": "蓝牙模式",
+                  "hint": "将控制器模拟为蓝牙模式而非 USB 模式。默认使用蓝牙模式是因为这样可以减少应用程序与控制器交互时的问题。不过在某些游戏中，USB 模式可能会带来更好的 LED 灯光支持。欢迎测试并反馈！",
+                  "unit": "",
+                  "tags": [
+                    "advanced",
+                    "expert"
+                  ],
+                  "default": true
+                }
+              }
+            }
+          }
+        },
+        "swap_armory": {
+          "type": "bool",
+          "title": "交换 ROG Menu/View 按钮",
+          "hint": "交换 Armory Crate/Command center 与 start/select 按钮",
+          "unit": "",
+          "tags": [
+            "non-essential"
+          ],
+          "default": false
+        },
+        "imu": {
+          "type": "bool",
+          "title": "体感支持",
+          "hint": "启用陀螺仪/加速度计 (IMU) 支持 (0.3% 后台 CPU 使用)",
+          "unit": "",
+          "tags": [],
+          "default": true
+        },
+        "imu_hz": {
+          "type": "discrete",
+          "title": "体感采样率",
+          "hint": "设置IMU的采样频率",
+          "unit": "",
+          "tags": [
+            "non-essential"
+          ],
+          "default": 200,
+          "options": [
+            100,
+            200,
+            400,
+            800
+          ]
+        },
+        "limits": {
+          "type": "mode",
+          "title": "死区和震动",
+          "hint": "配置摇杆和扳机死区, 震动强度",
+          "unit": "",
+          "tags": [
+            "limits",
+            "non-essential"
+          ],
+          "default": "default",
+          "modes": {
+            "default": {
+              "type": "container",
+              "title": "默认",
+              "hint": "根据硬件自动选择合适的值",
+              "unit": "",
+              "tags": [],
+              "default": null,
+              "children": {}
+            },
+            "manual": {
+              "type": "container",
+              "title": "手动",
+              "hint": "允许手动配置死区和震动强度",
+              "unit": "",
+              "tags": [],
+              "default": null,
+              "children": {
+                "vibration": {
+                  "type": "int",
+                  "title": "震动强度",
+                  "hint": "震动强度。值越高, 震动越强",
+                  "unit": "%",
+                  "tags": [],
+                  "default": 100,
+                  "min": 0,
+                  "max": 100,
+                  "step": 20,
+                  "smin": null,
+                  "smax": null
+                },
+                "ls_min": {
+                  "type": "int",
+                  "title": "左摇杆最小值",
+                  "hint": "摇杆死区值。数值越大，需要更大的摇杆偏移才会开始响应",
+                  "unit": "%",
+                  "tags": [],
+                  "default": 5,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "ls_max": {
+                  "type": "int",
+                  "title": "左摇杆最大值",
+                  "hint": "摇杆最大阈值。数值越大，需要更大的摇杆偏移才会达到最大输出",
+                  "unit": "%",
+                  "tags": [],
+                  "default": 64,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "rs_min": {
+                  "type": "int",
+                  "title": "右摇杆最小值",
+                  "hint": "摇杆死区值。数值越大，需要更大的摇杆偏移才会开始响应",
+                  "unit": "%",
+                  "tags": [],
+                  "default": 5,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "rs_max": {
+                  "type": "int",
+                  "title": "右摇杆最大值",
+                  "hint": "摇杆最大阈值。数值越大，需要更大的摇杆偏移才会达到最大输出",
+                  "unit": "%",
+                  "tags": [],
+                  "default": 64,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "lt_min": {
+                  "type": "int",
+                  "title": "左扳机最小值",
+                  "hint": "摇杆死区值。数值越大，需要更大的摇杆偏移才会开始响应",
+                  "unit": "%",
+                  "tags": [],
+                  "default": 5,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "lt_max": {
+                  "type": "int",
+                  "title": "左扳机最大值",
+                  "hint": "摇杆最大阈值。数值越大，需要更大的摇杆偏移才会达到最大输出",
+                  "unit": "%",
+                  "tags": [],
+                  "default": 64,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "rt_min": {
+                  "type": "int",
+                  "title": "右扳机最小值",
+                  "hint": "摇杆死区值。数值越大，需要更大的摇杆偏移才会开始响应",
+                  "unit": "%",
+                  "tags": [],
+                  "default": 5,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "rt_max": {
+                  "type": "int",
+                  "title": "右扳机最大值",
+                  "hint": "摇杆最大阈值。数值越大，需要更大的摇杆偏移才会达到最大输出",
+                  "unit": "%",
+                  "tags": [],
+                  "default": 64,
+                  "min": 0,
+                  "max": 100,
+                  "step": 2,
+                  "smin": null,
+                  "smax": null
+                },
+                "reset": {
+                  "type": "action",
+                  "title": "恢复默认",
+                  "hint": "将所有值重置为默认",
+                  "unit": "",
+                  "tags": [],
+                  "default": null
+                }
+              }
+            }
+          }
+        },
+        "select_reboots": {
+          "type": "bool",
+          "title": "长按 View 键重启",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "non-essential"
+          ],
+          "default": false
+        },
+        "nintendo_mode": {
+          "type": "bool",
+          "title": "任天堂模式 (A-B 交换)",
+          "hint": "A 与 B 交换，X 与 Y 交换。",
+          "unit": "",
+          "tags": [
+            "non-essential"
+          ],
+          "default": false
+        },
+        "rgb_boot": {
+          "type": "bool",
+          "title": "启动时的 RGB 灯效",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "advanced"
+          ],
+          "default": false
+        },
+        "rgb_charging": {
+          "type": "bool",
+          "title": "充电时休眠状态下的 RGB 灯效",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "advanced"
+          ],
+          "default": false
+        }
+      }
+    }
+  },
+  "magic_modules": {},
+  "wincontrols": {},
+  "gamemode": {
+    "power": {
+      "type": "container",
+      "title": "电源",
+      "hint": "",
+      "unit": "",
+      "tags": [
+        "non-essential"
+      ],
+      "default": null,
+      "children": {
+        "status": {
+          "type": "display",
+          "title": "错误",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "error"
+          ],
+          "default": null
+        },
+        "reboot_windows": {
+          "type": "action",
+          "title": "重启进入 Windows",
+          "hint": "确保您已保存游戏进度",
+          "unit": "",
+          "tags": [
+            "verify"
+          ],
+          "default": null
+        },
+        "hibernate": {
+          "type": "action",
+          "title": "休眠",
+          "hint": "保存您的进度并关闭设备",
+          "unit": "",
+          "tags": [
+            "verify"
+          ],
+          "default": null
+        },
+        "hibernate_auto": {
+          "type": "bool",
+          "title": "当设备请求休眠且电池电量低于 5% 时自动休眠",
+          "hint": "某些设备会唤醒并强制 Windows 进入休眠状态。如果 Linux 不执行相同操作，可能会引发问题。系统将在检测到设备发热且电池电量低于 5% 时自动进入休眠状态。\n",
+          "unit": "",
+          "tags": [],
+          "default": true
+        }
+      }
+    },
+    "display": {
+      "type": "container",
+      "title": "显示",
+      "hint": "",
+      "unit": "",
+      "tags": [],
+      "default": null,
+      "children": {
+        "touchscreen_disable": {
+          "type": "bool",
+          "title": "禁用触摸屏 (直到重启)",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": null
+        },
+        "gestures_disable": {
+          "type": "bool",
+          "title": "禁用触摸手势 (直到重启)",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": null
+        }
+      }
+    },
+    "gamescope": {
+      "type": "container",
+      "title": "Gamescope",
+      "hint": "",
+      "unit": "",
+      "tags": [],
+      "default": null,
+      "children": {}
+    }
+  },
+  "updates": {},
+  "debug": {},
+  "shortcuts": {
+    "custom": {
+      "type": "container",
+      "title": "设备按钮",
+      "hint": "",
+      "unit": "",
+      "tags": [
+        "non-essential"
+      ],
+      "default": null,
+      "children": {}
+    },
+    "controller": {
+      "type": "container",
+      "title": "外部控制器",
+      "hint": "",
+      "unit": "",
+      "tags": [
+        "non-essential"
+      ],
+      "default": null,
+      "children": {
+        "xbox_y": {
+          "type": "multiple",
+          "title": "Xbox + Y",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "tdp_cycle",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP",
+            "disconnect": "断开控制器连接"
+          }
+        },
+        "xbox_b": {
+          "type": "multiple",
+          "title": "Xbox + B",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "hhd_expanded",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        },
+        "xbox_a": {
+          "type": "multiple",
+          "title": "Xbox + A",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "disabled",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        },
+        "xbox_x": {
+          "type": "multiple",
+          "title": "Xbox + X",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "disabled",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        },
+        "allow_select": {
+          "type": "bool",
+          "title": "Use Select as alternative to Xbox",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": true
+        }
+      }
+    },
+    "touchscreen": {
+      "type": "container",
+      "title": "触摸屏",
+      "hint": "",
+      "unit": "",
+      "tags": [
+        "non-essential"
+      ],
+      "default": null,
+      "children": {
+        "bottom": {
+          "type": "multiple",
+          "title": "↑ 向上滑动",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "keyboard",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        },
+        "right_top": {
+          "type": "multiple",
+          "title": "← 右侧边滑动 (顶部)",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "hhd_qam",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        },
+        "right_bottom": {
+          "type": "multiple",
+          "title": "← 右侧边滑动 (底部)",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "steam_qam",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        },
+        "left_top": {
+          "type": "multiple",
+          "title": "→ 左侧边滑动 (顶部)",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "hhd_expanded",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        },
+        "left_bottom": {
+          "type": "multiple",
+          "title": "→ 左侧边滑动 (底部)",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "steam_expanded",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        },
+        "top": {
+          "type": "multiple",
+          "title": "↓ 向下滑动",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "disabled",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        }
+      }
+    },
+    "keyboard": {
+      "type": "container",
+      "title": "键盘 (仅游戏中)",
+      "hint": "",
+      "unit": "",
+      "tags": [
+        "non-essential"
+      ],
+      "default": null,
+      "children": {
+        "meta_press": {
+          "type": "multiple",
+          "title": "Start (Meta) 按下",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "disabled",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        },
+        "meta_hold": {
+          "type": "multiple",
+          "title": "Start (Meta) 按住",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "disabled",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        },
+        "ctrl_3": {
+          "type": "multiple",
+          "title": "Ctrl + 3",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "hhd_expanded",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        },
+        "ctrl_4": {
+          "type": "multiple",
+          "title": "Ctrl + 4",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": "hhd_qam",
+          "options": {
+            "disabled": "禁用",
+            "keyboard": "Steam 键盘",
+            "steam_qam": "Steam 侧边菜单",
+            "steam_expanded": "Steam 叠加层",
+            "hhd_qam": "HHD 侧边菜单",
+            "hhd_expanded": "HHD 叠加层",
+            "tdp_cycle": "Cycle TDP"
+          }
+        }
+      }
+    }
+  },
+  "hhd": {
+    "settings": {
+      "type": "container",
+      "title": "核心设置",
+      "hint": "",
+      "unit": "",
+      "tags": [
+        "non-essential"
+      ],
+      "default": null,
+      "children": {
+        "language": {
+          "type": "multiple",
+          "title": "语言",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "i18n",
+            "non-essential",
+            "language"
+          ],
+          "default": "system",
+          "options": {
+            "system": "系统",
+            "C": "English",
+            "zh_CN": "简体中文",
+            "zh_TW": "繁體中文",
+            "pt_BR": "葡萄牙语(巴西)",
+            "ru_RU": "俄语",
+            "ko": "Korean"
+          }
+        },
+        "theme": {
+          "type": "multiple",
+          "title": "主题",
+          "hint": "更改用户界面主题。默认为 Diavolo 或您的发行版主题。",
+          "unit": "",
+          "tags": [
+            "theme-selector",
+            "advanced"
+          ],
+          "default": "default",
+          "options": {
+            "default": "默认",
+            "diavolo": "Diavolo",
+            "ocean": "Atlantis",
+            "vapor": "Vapor",
+            "blood_orange": "Blood Orange"
+          }
+        },
+        "reset": {
+          "type": "action",
+          "title": "重置设置",
+          "hint": "将所有 Handheld Daemon 设置恢复为默认值。",
+          "unit": "",
+          "tags": [
+            "reset-button",
+            "verify"
+          ],
+          "default": null
+        },
+        "version": {
+          "type": "display",
+          "title": "Handheld Daemon 版本",
+          "hint": "显示 Handheld Daemon 版本",
+          "unit": "",
+          "tags": [
+            "hhd-version-display",
+            "text"
+          ],
+          "default": null
+        },
+        "version_ui": {
+          "type": "display",
+          "title": "Handheld Daemon UI 版本",
+          "hint": "显示 Handheld Daemon 版本",
+          "unit": "",
+          "tags": [
+            "hhd-version-display",
+            "text"
+          ],
+          "default": null
+        },
+        "update_stable": {
+          "type": "action",
+          "title": "更新 (稳定版)",
+          "hint": "从 PyPi 更新到最新版本 (仅本地安装)",
+          "unit": "",
+          "tags": [
+            "hhd-update-stable",
+            "verify"
+          ],
+          "default": null
+        },
+        "update_beta": {
+          "type": "action",
+          "title": "更新 (不稳定版)",
+          "hint": "更新到 git 的 master 分支 (仅本地安装)",
+          "unit": "",
+          "tags": [
+            "hhd-update-beta",
+            "verify"
+          ],
+          "default": null
+        },
+        "update_error": {
+          "type": "display",
+          "title": "更新错误",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "error",
+            "non-essential"
+          ],
+          "default": null
+        },
+        "tdp_ready": {
+          "type": "bool",
+          "title": "",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "hidden"
+          ],
+          "default": null
+        },
+        "tdp_enable": {
+          "type": "bool",
+          "title": "启用 TDP 控制",
+          "hint": "启用 Handheld Daemon 的 TDP 管理。启用后，Handheld Daemon 会在系统启动和电源状态切换时自动设置并维护 TDP 限制。\n如果设备崩溃，TDP 设置将在下次启动时禁用。",
+          "unit": "",
+          "tags": [],
+          "default": false
+        },
+        "enforce_limits": {
+          "type": "bool",
+          "title": "强制使用设备 TDP 限制",
+          "hint": "当此选项打开时, 设置将遵守设备制造商规定的限制, 但要视其可用性而定。\n关闭时, TDP 设置范围将扩展到当前设备逻辑上可能的范围 (不考虑制造商规格)。\n重新启动后, 所有超出规格的设置将被设置为系统规格。",
+          "unit": "",
+          "tags": [
+            "expert"
+          ],
+          "default": true
+        },
+        "amd_energy_enable": {
+          "type": "bool",
+          "title": "启用电源管理",
+          "hint": "Handheld daemon 将管理系统的电源偏好, 包括调度程序、Boost、GPU 频率和 EPP。此外, Handheld daemon 将启动一个 PPD 服务来取代系统中 PPD 的角色。",
+          "unit": "",
+          "tags": [],
+          "default": true
+        },
+        "amd_energy_ppd": {
+          "type": "bool",
+          "title": "启用 PPD 模拟 (KDE/Gnome 电源)",
+          "hint": "启用 PPD 服务来管理系统的电源偏好。",
+          "unit": "",
+          "tags": [],
+          "default": true
+        },
+        "rgb": {
+          "type": "bool",
+          "title": "启用 RGB 支持",
+          "hint": "",
+          "unit": "",
+          "tags": [],
+          "default": true
+        },
+        "powerbuttond": {
+          "type": "bool",
+          "title": "Steam 电源按钮处理",
+          "hint": "启用 Steam 电源按钮处理 (负责睡眠动画和电源按钮菜单)",
+          "unit": "",
+          "tags": [],
+          "default": true
+        }
+      }
+    },
+    "http": {
+      "type": "container",
+      "title": "API 配置",
+      "hint": "HHD 的 http 端点的设置",
+      "unit": "",
+      "tags": [
+        "hhd-http",
+        "advanced",
+        "expert"
+      ],
+      "default": null,
+      "children": {
+        "localhost": {
+          "type": "bool",
+          "title": "仅限本地访问",
+          "hint": "API 监听目标设置为 '127.0.0.1' 而不是 '0.0.0.0'",
+          "unit": "",
+          "tags": [
+            "advanced"
+          ],
+          "default": true
+        },
+        "token": {
+          "type": "bool",
+          "title": "使用安全令牌",
+          "hint": "在 `~/.config/hhd/token` 生成一个安全令牌，用于认证。",
+          "unit": "",
+          "tags": [
+            "advanced"
+          ],
+          "default": true
+        }
+      }
+    },
+    "steamos": {
+      "type": "container",
+      "title": "",
+      "hint": "",
+      "unit": "",
+      "tags": [
+        "hidden"
+      ],
+      "default": null,
+      "children": {
+        "tdp_status": {
+          "type": "multiple",
+          "title": "",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "hidden"
+          ],
+          "default": null,
+          "options": {
+            "disabled": "",
+            "enabled": "",
+            "conflict": ""
+          }
+        },
+        "tdp_min": {
+          "type": "custom",
+          "title": "",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "hidden"
+          ],
+          "default": null,
+          "config": null
+        },
+        "tdp_default": {
+          "type": "custom",
+          "title": "",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "hidden"
+          ],
+          "default": null,
+          "config": null
+        },
+        "tdp_max": {
+          "type": "custom",
+          "title": "",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "hidden"
+          ],
+          "default": null,
+          "config": null
+        },
+        "tdp_set": {
+          "type": "bool",
+          "title": "",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "hidden"
+          ],
+          "default": null
+        },
+        "gpu_status": {
+          "type": "multiple",
+          "title": "",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "hidden"
+          ],
+          "default": null,
+          "options": {
+            "disabled": "",
+            "enabled": "",
+            "conflict": ""
+          }
+        },
+        "gpu_min": {
+          "type": "custom",
+          "title": "",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "hidden"
+          ],
+          "default": null,
+          "config": null
+        },
+        "gpu_max": {
+          "type": "custom",
+          "title": "",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "hidden"
+          ],
+          "default": null,
+          "config": null
+        },
+        "gpu_set": {
+          "type": "bool",
+          "title": "",
+          "hint": "",
+          "unit": "",
+          "tags": [
+            "hidden"
+          ],
+          "default": false
+        }
+      }
+    },
+    "version": {
+      "type": "version",
+      "tags": [
+        "non-essential",
+        "advanced",
+        "expert",
+        "hide"
+      ],
+      "value": "cab1d863-zh_CN"
+    }
+  }
+}

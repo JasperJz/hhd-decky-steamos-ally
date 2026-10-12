@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+node_modules/
+.env
+.env.*
+*.token
+*.tar.gz
+*.log
