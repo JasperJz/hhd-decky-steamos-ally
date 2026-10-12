@@ -53,7 +53,7 @@ node tests/test_frontend.js
 3. 打开 Decky 设置，启用开发者模式，在开发者选项中选择从 ZIP 安装插件，选择这个文件并确认。
 4. 打开 Handheld Daemon，确认后台连接正常。
 
-仓库目前是私有的，需要登录有权限的 GitHub 账号下载，再选择本地 ZIP。直接把私有 Release 地址交给 Decky 下载会缺少 GitHub 登录权限。发布 ZIP 只安装插件，仍需要设备上已有可用 HHD 后台；它不会自动安装 HHD、adjustor 或配置输入服务。
+公开仓库可直接下载 Release ZIP，也可在 Decky 的 URL 安装入口使用该 ZIP 的直接下载链接。仓库为私有时，需要先登录有权限的 GitHub 账号下载，再选择本地 ZIP；直接把私有 Release 地址交给 Decky 下载会缺少 GitHub 登录权限。发布 ZIP 只安装插件，仍需要设备上已有可用 HHD 后台；它不会自动安装 HHD、adjustor 或配置输入服务。
 
 Release 同时附带 `SHA256SUMS` 供校验。在源码目录运行 `node tools/build.js` 后执行 `python tools/package.py` 可复现安装包，输出位于 `artifacts/`。包内只包含一个 `hhd-decky/` 目录及运行文件、说明和许可证，不包含测试数据或设备配置。
 
