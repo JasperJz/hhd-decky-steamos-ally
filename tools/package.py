@@ -23,7 +23,7 @@ def package(output=None):
             entry.create_system = 3
             entry.external_attr = 0o100644 << 16
             entry.compress_type = zipfile.ZIP_DEFLATED
-            z.writestr(entry, (ROOT / name).read_bytes())
+            z.writestr(entry, (ROOT / name).read_bytes().replace(b'\r\n', b'\n'))
     digest = hashlib.sha256(archive.read_bytes()).hexdigest()
     (output / 'SHA256SUMS').write_text(f'{digest}  {archive.name}\n', encoding='utf-8')
     return archive

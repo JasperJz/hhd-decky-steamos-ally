@@ -17,6 +17,8 @@ class PackageTests(unittest.TestCase):
                 manifests = [p for p in z.namelist() if p.endswith('/plugin.json') and p.count('/') == 1]
                 self.assertEqual(manifests, ['hhd-decky/plugin.json'])
                 self.assertEqual(set(z.namelist()), {'hhd-decky/' + p for p in FILES})
+                for name in z.namelist():
+                    self.assertNotIn(b'\r\n', z.read(name))
                 manifest = json.loads(z.read(manifests[0]))
                 self.assertEqual(manifest['name'], 'Handheld Daemon')
                 self.assertIn('root', manifest['flags'])
