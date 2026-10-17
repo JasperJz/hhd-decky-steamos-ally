@@ -83,6 +83,21 @@ sudo /home/deck/.local/share/hhd/maintenance/repair-hhd.sh
 
 ## 测试范围与开销
 
+### 可选：X11 桌面游戏内键盘兼容处理
+
+当 Steam 能接收键盘命令，但全屏游戏或登录窗口遮挡屏幕键盘时，可使用 `maintenance/desktop_keyboard.py`。它仅用于 KDE/X11 桌面模式，游戏模式沿用 HHD 原来的调用路径。安装包 ZIP 不会自动安装此补丁。
+
+把 `desktop_keyboard.py` 和 `install_desktop_keyboard.py` 放在同一目录，在已验证的 HHD 环境运行：
+
+```sh
+sudo /home/deck/.local/share/hhd/venv/bin/python maintenance/install_desktop_keyboard.py
+sudo systemctl restart hhd-power
+```
+
+这是 HHD 后台源码补丁；重启后台会短暂重连控制器。调用键盘时可能短暂露出桌面，再返回原来的游戏。辅助进程仅在键盘打开期间运行，关闭后退出并恢复此前的合成器/游戏窗口属性。依赖 `xdotool`、`gdbus` 及 KDE 默认的 Meta+D、Alt+Shift+F12 快捷键；其他桌面环境未验证。不读取或记录输入文本。
+
+原 HHD 文件备份在 `/var/lib/hhd-trial/desktop-keyboard-plugin-original.py`。恢复该文件到 HHD 的 `plugins/plugin.py` 并重启 `hhd-power` 即可撤回。HHD 重装或升级后需要重新应用此可选补丁；旧版本 Release 不包含它。
+
 105 个后台控制路径验证、100 个可见前端回调与页面重新挂载测试通过。掌机上已验证分类切换、RGB 提交，以及 TDP、CPU boost、充电上限、风扇模式、GPU 频率和配置 CRUD。
 
 短时采样中 Decky 插件进程约 17MiB PSS，CPU 约占单核 0.2%；HHD 核心约 41MiB / 单核 2.2%。这些是特定设备上的观察，不包括 Steam 前端增量内存，不保证零帧率影响，也不证明无长期泄漏。关闭页面后轮询停止已实测。
