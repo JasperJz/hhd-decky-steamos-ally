@@ -35,6 +35,37 @@
       if (!r.result || !r.result.ok) throw Error(r.result?.error || 'HHD 没有返回有效结果');
       return r.result;
     };
+    // Keep lifecycle hooks outside Content: the QAM panel unmounts when closed.
+    let colorDisposed=false,colorRestoreRunning=false,colorRestorePending=false;
+    const colorHooks=[];
+    async function restoreColor() {
+      if(colorDisposed)return;
+      colorRestorePending=true;
+      if(colorRestoreRunning)return;
+      colorRestoreRunning=true;
+      try {
+        // Merge synchronous event bursts without a debounce timer.
+        await Promise.resolve();
+        while(colorRestorePending&&!colorDisposed) {
+          colorRestorePending=false;
+          try {
+            const result=await api('color_restore');
+            if(result.error)console.warn('[HHD color]',result.error);
+          } catch(e) {console.warn('[HHD color]',e.message);}
+        }
+      } finally {colorRestoreRunning=false;}
+    }
+    const steam=globalThis.SteamClient;
+    for(const [owner,name] of [
+      [steam?.UI,'RegisterForStartupFinished'],
+      [steam?.UI,'RegisterForUIModeChanged'],
+      [steam?.GameSessions,'RegisterForAppLifetimeNotifications'],
+      [steam?.System,'RegisterForOnResumeFromSuspend']
+    ]) {
+      try {if(typeof owner?.[name]==='function')colorHooks.push(owner[name](()=>{void restoreColor();}));}
+      catch(e) {console.warn('[HHD color] hook '+name,e.message);}
+    }
+    void restoreColor();
     const saved=globalThis.__hhdNativeState||(globalThis.__hhdNativeState={data:null,error:'',status:'正在连接 HHD…',category:'tdp',advanced:true,busy:false,armed:'',profiles:[],profile:'',name:'Decky Profile'});
     const listeners=new Set();
     const setData=v=>{saved.data=v;listeners.forEach(fn=>fn());};
@@ -73,6 +104,37 @@
         if(current.current){const d={...current.current,state:copy(current.current.state)};put(d.state,path,value);install(d);}
         clearTimeout(timer.current);timer.current=setTimeout(flush,300);
       }
+    function ColorPanel() {
+      const [color,setColor]=R.useState(null),[message,setMessage]=R.useState('正在读取屏幕调色…');
+      const pending=R.useRef({}),timer=R.useRef(null),running=R.useRef(false),alive=R.useRef(true);
+      const load=async()=>{try{const d=await api('color');if(alive.current){setColor(d);setMessage(d.error||'');}}catch(e){if(alive.current)setMessage(e.message);}};
+      async function flush() {
+        if(running.current||!Object.keys(pending.current).length)return;
+        const args=pending.current;pending.current={};running.current=true;
+        try{const d=await api('color',args);if(alive.current){setColor({...d,color:{...d.color,...pending.current.changes}});setMessage('调色已应用并保存');}}
+        catch(e){if(alive.current){setMessage(e.message);await load();}}
+        finally{running.current=false;if(Object.keys(pending.current).length)flush();}
+      }
+      function send(args) {
+        pending.current={...pending.current,...args, ...(args.changes?{changes:{...pending.current.changes,...args.changes}}:{})};
+        if(args.preset)delete pending.current.changes;
+        clearTimeout(timer.current);timer.current=setTimeout(flush,args.changes?300:0);
+        if(args.changes)setColor(c=>({...c,color:{...c.color,...args.changes}}));
+      }
+      R.useEffect(()=>{alive.current=true;load();return()=>{alive.current=false;clearTimeout(timer.current);flush();};},[]);
+      if(!color)return field('屏幕色彩',message,'color-loading');
+      const names={native:'原生 / 关闭',natural:'自然增强',vivid:'鲜艳（120 / 10）',soft:'柔和鲜艳'};
+      const labels={saturation:'饱和度',contrast:'对比度',vibrance:'自然饱和度',temperature:'色温（正值偏暖）',gamma:'暗部亮度',black:'黑位',gain_r:'红色增益',gain_g:'绿色增益',gain_b:'蓝色增益'};
+      const neutral={saturation:100,contrast:0,vibrance:0,temperature:0,gamma:0,black:0,gain_r:100,gain_g:100,gain_b:100};
+      const selected=Object.keys(names).find(k=>k==='native'?!color.enabled:color.enabled&&Object.entries({...neutral,...{natural:{saturation:110,contrast:5},vivid:{saturation:120,contrast:10},soft:{saturation:110,contrast:5,vibrance:15}}[k]}).every(([f,v])=>color.color[f]===v))||'custom';
+      return h(D.PanelSection,{title:'屏幕色彩'},
+        field('状态',message||color.error||(color.applied?'已应用':'等待应用'),'color-status'),
+        h(D.ToggleField,{label:'启用屏幕调色',checked:color.enabled,disabled:!color.supported,onChange:v=>send({enabled:!!v})}),
+        h(D.DropdownItem,{label:'预设',rgOptions:[...Object.entries(names).map(([data,label])=>({data,label})),{data:'custom',label:'自定义'}],selectedOption:selected,disabled:!color.supported,onChange:o=>{if(o.data!=='custom')send({preset:o.data});}}),
+        ...Object.entries(labels).map(([key,label])=>h(D.PanelSectionRow,{key:'color-'+key},h(D.SliderField,{label,value:color.color[key],min:color.ranges[key][0],max:color.ranges[key][1],step:1,showValue:true,disabled:!color.supported||!color.enabled,onChange:v=>send({changes:{[key]:Math.round(v)}})}))),
+        h(D.ButtonItem,{onClick:load},'重新读取调色状态'),
+        field('说明','适用于 SDR 游戏；调色不会让 LCD 获得 OLED 的纯黑。原生预设可随时恢复。','color-help'));
+    }
     function Content() {
       const [data,localData]=R.useState(saved.data);
       const [error,localError]=R.useState(saved.error);
@@ -131,9 +193,11 @@
       const top=[h('div',{key:'status',style:{fontSize:'12px',opacity:0.75,marginBottom:'8px'}},error||status),error?h(D.ButtonItem,{key:'retry',onClick:()=>refresh(true)},'重新连接 / 刷新'):null];
       if(!data)return h('div',null,top);
       const options=Object.entries(data.sections||{}).filter(([k])=>Object.keys(data.settings[k]||{}).length).map(([data,label])=>({data,label}));
-      options.push({data:'__profiles',label:'保存 / 应用配置'},{data:'__diagnostics',label:'诊断与硬件读回'});
+      options.push({data:'__screen',label:'屏幕色彩'},{data:'__profiles',label:'保存 / 应用配置'},{data:'__diagnostics',label:'诊断与硬件读回'});
       top.push(h(D.PanelSection,{key:'nav'},h(D.DropdownItem,{label:'设置分类',rgOptions:options,selectedOption:category,onChange:o=>{setCategory(o.data);setArmed('');}}),h(D.ToggleField,{label:'显示高级设置',checked:advanced,onChange:setAdvanced})));
-      if(category==='__profiles') {
+      if(category==='__screen') {
+        top.push(h(ColorPanel,{key:'screen-color'}));
+      } else if(category==='__profiles') {
         top.push(h(D.PanelSection,{key:'profiles',title:'配置'},h(D.DropdownItem,{label:'已有配置',rgOptions:profiles.map(p=>({data:p,label:p})),selectedOption:profile,onChange:o=>setProfile(o.data)}),h(D.ButtonItem,{disabled:busy||!profile,onClick:()=>profileAction('apply')},armed==='profile:apply'?'确认应用配置':'应用配置'),h(D.ButtonItem,{disabled:busy||!profile,onClick:()=>profileAction('del')},armed==='profile:del'?'确认删除配置':'删除配置'),h(D.TextField,{label:'名称（英文 / 数字 / 空格）',value:name,onChange:setName}),h(D.ButtonItem,{disabled:busy||!name.trim(),onClick:()=>profileAction('set')},'保存当前设置')));
       } else if(category==='__diagnostics') {
         const leaves=allLeaves(data.settings),visible=leaves.filter(x=>!['hidden','hide'].some(t=>(x.node.tags||[]).includes(t)));
@@ -146,6 +210,6 @@
       top.push(h(D.PanelSection,{title:'硬件读回',key:'hardware'},field('TDP 快 / 慢 / 持续',[hw.ppt_fppt,hw.ppt_pl2_sppt,hw.ppt_pl1_spl].map(x=>x??'?').join(' / ')+' W','tdp'),field('CPU 动态加速（睿频）',hw.cpu_boost==='1'?'开启':hw.cpu_boost==='0'?'关闭':'不可读','boost'),field('风扇 RPM',(hw.fan_rpm||[]).join(' / '),'fans'),field('充电上限',hw.charge_limit==='0'?'固件默认':(hw.charge_limit??'?')+'%','charge')));
       return h('div',null,top);
     }
-    return {title:h('div',{className:D.staticClasses.Title},'Handheld Daemon'),content:h(Content),icon:h('span',null,'HHD'),onDismount(){}};
+    return {title:h('div',{className:D.staticClasses.Title},'Handheld Daemon'),content:h(Content),icon:h('span',null,'HHD'),onDismount(){colorDisposed=true;colorRestorePending=false;for(const hook of colorHooks){try{hook?.unregister();}catch(e){console.warn('[HHD color] unregister',e.message);}}}};
   });
 })(DFL, SP_REACT);

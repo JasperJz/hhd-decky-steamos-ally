@@ -5,8 +5,12 @@ import json
 import socket
 import re
 import time
+import sys
 from pathlib import Path
 from urllib.parse import urlencode
+# Decky's frozen backend may only put py_modules on the import path.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from screen_color import ScreenColor
 
 MAINTENANCE = {'hhd.settings.update_stable', 'hhd.settings.update_beta'}
 
@@ -121,9 +125,21 @@ class Plugin:
     async def _main(self):
         self.lock = asyncio.Lock()
         self.cache = None
+        self.screen = ScreenColor()
 
     async def _unload(self):
         pass
+
+    async def color_restore(self):
+        return await self.screen.restore()
+
+    async def color(self, changes=None, preset=None, enabled=None):
+        try:
+            if changes is None and preset is None and enabled is None:
+                return self.screen.status()
+            return await self.screen.update(changes, preset, enabled)
+        except Exception as e:
+            return {'ok': False, 'error': str(e)}
 
     def _snapshot(self):
         state = request('GET', 'state')

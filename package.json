@@ -1,6 +1,6 @@
 {
   "name": "hhd-decky-steamos-ally",
-  "version": "0.2.0-local.2",
+  "version": "0.3.0-local.1",
   "private": true,
   "scripts": {
     "build": "node tools/build.js",

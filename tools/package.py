@@ -5,7 +5,7 @@ from pathlib import Path
 import zipfile
 
 ROOT = Path(__file__).resolve().parent.parent
-FILES = ['main.py', 'plugin.json', 'package.json', 'dist/index.js',
+FILES = ['main.py', 'screen_color.py', 'plugin.json', 'package.json', 'dist/index.js',
          'LICENSE', 'README.md', 'NOTICE.md',
          'licenses/hhd-LICENSE', 'licenses/adjustor-LICENSE']
 
