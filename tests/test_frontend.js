@@ -17,6 +17,10 @@ context.SteamClient={UI:{RegisterForStartupFinished:register('startup'),Register
 const factory=vm.runInNewContext(fs.readFileSync(__dirname+'/../dist/index.js','utf8'),context);
 const plugin=factory({callPluginMethod:async(method,args)=>{
   if(method==='color_restore'){restores++;return {success:true,result:{ok:true}};}
+  if(method==='hud'){
+    if(Object.keys(args).length)writes.push({hud:args});
+    return {success:true,result:{ok:true,enabled:args.enabled??true,notice:'test',selected:{fps:args.changes?.fps??true},groups:[{title:'帧率',items:[{key:'fps',label:'帧率'}]}]}};
+  }
   if(method==='snapshot')return {success:true,result:clone(states[0]||snapshot())};
   if(method==='apply'){writes.push(args.changes);const d=clone(states[0]);for(const c of args.changes)put(d.state,c.path,c.value);return {success:true,result:{...d,ok:true}};}
   if(method==='color'){
@@ -51,11 +55,11 @@ walk(settings);
  await new Promise(r=>setImmediate(r));assert.strictEqual(restores,beforeBurst+1,'Event burst must coalesce');
  const beforeIdle=restores;await new Promise(r=>setTimeout(r,20));assert.strictEqual(restores,beforeIdle,'Idle must not restore');
  for(const c of cases){
-  states=[];refs=[];states[0]=snapshot();states[3]=c.path.split('.')[0];states[4]=true;refs[0]={current:states[0]};
+  states=[];refs=[];states[0]=snapshot();states[3]=c.path.startsWith('tdp.asus.fan')?'__fans':c.path.startsWith('tdp.amd_energy')?'__compute':c.path.split('.')[0];states[4]=true;refs[0]={current:states[0]};
   for(const [p,v] of c.requirements)put(states[0].state,p,v);
   Object.assign(context.__hhdNativeState,{data:states[0],category:states[3],advanced:true,armed:'',busy:false});
   let tree=render(),row=find(tree,n=>n.props.key===c.wrapper);assert(row,'Missing UI control '+c.path);
-  let control=find(row,n=>['ToggleField','SliderField','DropdownItem','ButtonItem'].includes(n.type));assert(control,'Missing interactive field '+c.path);
+  let control=find(row,n=>['ToggleField','SliderField','DropdownItem','DialogButton'].includes(n.type));assert(control,'Missing interactive field '+c.path);
   let value;
   if(c.node.type==='bool')value=!get(states[0].state,c.path);
   else if(c.node.type==='int')value=c.node.min;
@@ -66,17 +70,29 @@ walk(settings);
   const before=writes.length;
   if(c.node.type==='action'){
    control.props.onClick();assert.strictEqual(writes.length,before,'Action executed before confirmation');
-   tree=render();row=find(tree,n=>n.props.key===c.wrapper);control=find(row,n=>n.type==='ButtonItem');control.props.onClick();
+   tree=render();row=find(tree,n=>n.props.key===c.wrapper);control=find(row,n=>n.type==='DialogButton');control.props.onClick();
   }else control.props.onChange(control.type==='DropdownItem'?{data:value}:value);
   await new Promise(r=>setTimeout(r,8));
   assert.strictEqual(writes.length,before+1,'No dispatched write '+c.path);
-  const result=writes.at(-1)[0];assert.strictEqual(result.path,c.path);assert.strictEqual(result.value,value);
+  const result=writes.at(-1).find(w=>w.path===c.path);assert(result);assert.strictEqual(result.value,value);
  }
  console.log('PASS: rendered and exercised '+cases.length+' native control callbacks across all mode branches');
  assert(cases.some(c=>c.path==='controllers.rog_ally.rgb_boot'));
  assert(cases.some(c=>c.path==='controllers.rog_ally.rgb_charging'));
  console.log('PASS: advanced boot/charging RGB controls present; actions require confirmation');
- let tree=render();let rgb=find(tree,n=>n.type==='DropdownItem'&&n.props.label==='设置分类');assert(rgb);rgb.props.onChange({data:'rgb'});states=[];refs=[];tree=render();assert.strictEqual(states[3],'rgb','Category lost after remount');console.log('PASS: RGB category survives full Content remount');
+ context.__hhdNativeState.category='__home';states=[];refs=[];let tree=render();
+ assert(!find(tree,n=>n.type==='DropdownItem'&&n.props.label==='设置分类'));
+ let rgb=find(tree,n=>n.props['data-hhd-module']==='rgb');assert(rgb);rgb.props.onClick();states=[];refs=[];tree=render();assert.strictEqual(states[3],'rgb','Category lost after remount');
+ const back=find(tree,n=>n.type==='DialogButton'&&n.children.includes('‹ 返回模块'));assert(back);back.props.onClick();
+ states=[];refs=[];tree=render();assert.strictEqual(states[3],'__home');
+ for(const id of ['tdp','__compute','__fans','rgb','__screen','controllers','shortcuts','gamemode','__profiles','hhd','__diagnostics'])assert(find(tree,n=>n.props['data-hhd-module']===id),id);
+ console.log('PASS: button navigation, all modules, back and category persistence');
+ context.__hhdNativeState.category='__profiles';states=[];refs=[];tree=render();
+ const nameInput=find(tree,n=>n.type==='TextField');assert(nameInput);
+ nameInput.props.onChange({currentTarget:{value:'Regression Profile'}});
+ tree=render();assert.strictEqual(context.__hhdNativeState.name,'Regression Profile');
+ assert(find(tree,n=>n.type==='DialogButton'&&n.children.includes('保存当前设置')));
+ console.log('PASS: native TextField change event keeps profile name a string');
  context.__hhdNativeState.category='__screen';states=[];refs=[];states[0]=snapshot();
  tree=render();const panel=find(tree,n=>typeof n.type==='function'&&n.type.name==='ColorPanel');assert(panel,'Screen color page missing');
  states=[];refs=[];let mounted=false;R.useEffect=fn=>{if(!mounted){mounted=true;fn();}};
@@ -88,6 +104,17 @@ walk(settings);
  const initial=writes.length;slider.props.onChange(115);slider.props.onChange(118);
  await new Promise(r=>setTimeout(r,8));assert.strictEqual(writes.length,initial+1);assert.strictEqual(writes.at(-1).color.changes.saturation,118);
  console.log('PASS: screen-color page presets and debounced slider callbacks');
+ context.__hhdNativeState.category='__hud';states=[];refs=[];states[0]=snapshot();
+ tree=render();const hudPanel=find(tree,n=>typeof n.type==='function'&&n.type.name==='HudPanel');assert(hudPanel);
+ states=[];refs=[];mounted=false;
+ function renderHud(){si=ri=0;return hudPanel.type();}
+ renderHud();await new Promise(r=>setTimeout(r,8));tree=renderHud();
+ const fpsToggle=find(tree,n=>n.type==='ToggleField'&&n.props.label==='帧率');assert(fpsToggle);fpsToggle.props.onChange(false);
+ await new Promise(r=>setTimeout(r,8));assert.strictEqual(writes.at(-1).hud.changes.fps,false);
+ tree=renderHud();assert.strictEqual(find(tree,n=>n.type==='ToggleField'&&n.props.label==='帧率').props.checked,false);
+ const visibility=find(tree,n=>n.type==='ToggleField'&&n.props.label==='显示性能监控');visibility.props.onChange(false);
+ await new Promise(r=>setTimeout(r,8));assert.strictEqual(writes.at(-1).hud.enabled,false);
+ console.log('PASS: HUD module toggles dispatch, readback and visibility');
  plugin.onDismount();assert.strictEqual(unregistered,4);
  const beforeUnload=restores;for(const callback of colorHooks.values())callback();
  await new Promise(r=>setImmediate(r));assert.strictEqual(restores,beforeUnload);

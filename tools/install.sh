@@ -12,7 +12,7 @@ if test -d "$plugin_dir"; then
     tar -czf "$backup_dir/hhd-decky-$(date +%Y%m%d-%H%M%S).tar.gz" -C "$decky_dir/plugins" hhd-decky
 fi
 mkdir -p -- "$plugin_dir/dist"
-for name in main.py screen_color.py plugin.json package.json LICENSE; do
+for name in main.py screen_color.py performance_hud.py mako_hud.py plugin.json package.json LICENSE; do
     install -m 644 -- "$repo_dir/$name" "$plugin_dir/$name"
 done
 install -m 644 -- "$repo_dir/dist/index.js" "$plugin_dir/dist/index.js"

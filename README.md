@@ -15,11 +15,14 @@
 
 ## 功能与修复
 
+- 性能监控：独立 MangoHud 页面，57 个显示项目按帧率、CPU、GPU、内存、电池与系统分组；点击开关即写入当前 MangoApp 配置并重载，无需重启游戏。保留字体和布局，首次修改备份为 `output-hud.conf.before-hhd-manager`，重载失败恢复配置。部分指标依赖硬件／游戏支持。MAKO 原始帧率与输出帧率合并显示为 `FPS 原始 → 输出`，由单个开关控制：固定模式读取 base_fps / observed_output_fps；动态模式由记录的输出请求间隔得到 FG req，不能视为屏幕扫描帧率。需通过 mako-run 开启 MAKO_PRESENT_DIAGNOSTICS 并重新启动游戏；采样超过 4 秒未更新即显示 N/A，不回放历史日志。MAKO 更新或重建包装脚本后需重新确认诊断已开启。
+
 - TDP、短时功耗上限、CPU 动态加速、GPU 频率、风扇及充电上限。
 - RGB 与控制器设置，包括后台提供的启动/充电灯效高级选项。
 - 配置保存、应用、删除；危险动作要求第二次点击确认。
-- 分类和设置状态在 Steam 快捷菜单卸载/重新挂载后保留。
+- 11 个模块按钮切页，模块内返回；风扇与 CPU/GPU 独立分组，高级项默认收起。页面和设置状态在 Steam 快捷菜单卸载/重新挂载后保留。
 - 设置写入串行、滑块修改合并提交，写后等待后台读回确认。
+- 调整 TDP 自动进入自定义模式，并核对实际硬件上限；可一键固定 15W。完整配置保存不再受单次修改 64 项限制，配置应用也逐项确认。
 - 设置定义按版本缓存，常规刷新数据从约 40KB 减少至 3.7KB。
 - 只在插件页面挂载时每 4 秒读取状态，离开页面后停止轮询。
 - 不常驻第二个 Electron 界面，不自行接管硬件控制循环。
@@ -108,8 +111,12 @@ sudo systemctl restart hhd-power
 
 没有穷尽测试所有控制器映射、休眠/重置及其他机型。修改配置前建议保存自己的配置。
 
+2026-10-24 在 SteamOS 3.9.5 上完成更新后恢复和新版模块界面验收：22 项 Python 测试、100 个前端回调、94 项实机设置写入／读回、11 个模块导航与布局检查通过。实机修改验证、配置恢复过程和未覆盖范围见 [恢复与验收记录](docs/20261024-recovery-verification.md)。系统更新可能丢弃额外的 `/etc` 配置；`maintenance/preserve-hhd.conf` 是本机 HHD 配置保留规则模板，插件 ZIP 不自动安装此系统规则。
+
 ## 许可与来源
 
 保留原 Decky 插件的许可证，见 [LICENSE](LICENSE)。HHD/adjustor 的设置定义与兼容性修改遵循各自上游许可，见 [NOTICE.md](NOTICE.md) 和 `licenses/`。
 
 上游项目：[HHD](https://github.com/hhd-dev/hhd)、[adjustor](https://github.com/hhd-dev/adjustor)。
+
+MAKO FPS 由 Decky 后端每秒采样并原子写入短文本，MangoHud 只执行 cat 读取，避免其约 50ms 的命令读取窗口漏读 Python 输出。仅在监控和合并 FPS 都启用时采样；关闭或卸载后停止采样。无新采样时显示 `FPS -- → --`。

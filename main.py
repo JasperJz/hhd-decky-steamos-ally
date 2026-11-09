@@ -11,6 +11,7 @@ from urllib.parse import urlencode
 # Decky's frozen backend may only put py_modules on the import path.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from screen_color import ScreenColor
+from performance_hud import PerformanceHUD
 
 MAINTENANCE = {'hhd.settings.update_stable', 'hhd.settings.update_beta'}
 
@@ -66,9 +67,9 @@ def definitions(schema):
     return out
 
 
-def validate(schema, changes):
+def validate(schema, changes, max_changes=64):
     defs = definitions(schema)
-    if not isinstance(changes, list) or not 1 <= len(changes) <= 64:
+    if not isinstance(changes, list) or not 1 <= len(changes) <= max_changes:
         raise ValueError('修改列表无效')
     tree = {}
     for change in changes:
@@ -126,9 +127,39 @@ class Plugin:
         self.lock = asyncio.Lock()
         self.cache = None
         self.screen = ScreenColor()
+        self.performance_hud = PerformanceHUD()
+        self.hud_task = None
+        try:
+            Plugin._sync_hud_sampler(self, self.performance_hud.status())
+        except (OSError, ValueError):
+            pass
 
     async def _unload(self):
-        pass
+        if getattr(self, 'hud_task', None):
+            self.hud_task.cancel()
+            try:
+                await self.hud_task
+            except asyncio.CancelledError:
+                pass
+
+    def _sync_hud_sampler(self, status):
+        running = getattr(self, 'hud_task', None)
+        wanted = status['enabled'] and status['selected'].get('mako_fps', False)
+        if wanted and (running is None or running.done()):
+            self.hud_task = asyncio.create_task(self.performance_hud.sample_loop())
+        elif not wanted and running:
+            running.cancel()
+            self.hud_task = None
+
+    async def hud(self, changes=None, enabled=None):
+        try:
+            if changes is None and enabled is None:
+                return await asyncio.to_thread(self.performance_hud.status)
+            status = await asyncio.to_thread(self.performance_hud.update, changes, enabled)
+            Plugin._sync_hud_sampler(self, status)
+            return status
+        except Exception as e:
+            return {'ok': False, 'error': str(e)}
 
     async def color_restore(self):
         return await self.screen.restore()
@@ -159,8 +190,13 @@ class Plugin:
         except Exception as e:
             return {'ok': False, 'error': 'HHD 后台未响应：' + str(e)}
 
-    def _apply(self, changes):
+    def _apply(self, changes, activate_tdp=True):
         schema = request('GET', 'settings')
+        # Editing a custom wattage must activate that mode; inactive values are
+        # otherwise accepted by the API while the hardware stays at its preset.
+        if activate_tdp and any(c.get('path') == 'tdp.asus.tdp_v2.custom.tdp' for c in changes):
+            changes = [c for c in changes if c.get('path') != 'tdp.asus.tdp_v2.mode']
+            changes = [*changes, {'path': 'tdp.asus.tdp_v2.mode', 'value': 'custom'}]
         payload = validate(schema, changes)
         state = request('POST', 'state', payload)
         # Actions automatically return to false; ordinary values must read back exactly.
@@ -179,6 +215,19 @@ class Plugin:
             mismatch = mismatches(state)
         if mismatch:
             raise ValueError('后台未接受：' + ', '.join(mismatch))
+        if (get_path(state, 'tdp.asus.tdp_v2.mode') == 'custom'
+                and any(c['path'] == 'tdp.asus.tdp_v2.custom.tdp' for c in changes)):
+            target = get_path(state, 'tdp.asus.tdp_v2.custom.tdp')
+            boost = get_path(state, 'tdp.asus.tdp_v2.custom.boost')
+            # The driver debounces hardware writes after the API acknowledgement.
+            for _ in range(25):
+                hw = hardware()
+                keys = ('ppt_pl1_spl',) if boost else ('ppt_pl1_spl', 'ppt_pl2_sppt', 'ppt_fppt')
+                if all(str(hw.get(k)) == str(target) for k in keys):
+                    break
+                time.sleep(.1)
+            else:
+                raise ValueError('TDP 配置已提交，但硬件尚未达到目标，请检查是否有其他功耗控制器')
         return {'ok': True, **Plugin._snapshot(self), 'written': changes}
 
     async def apply(self, changes):
@@ -191,6 +240,12 @@ class Plugin:
                 return {'ok': False, 'error': '修改未确认成功：' + str(e)}
 
     async def profiles(self, operation='list', name='', state=None, confirmed=False):
+        if not hasattr(self, 'lock'):
+            self.lock = asyncio.Lock()
+        async with self.lock:
+            return await Plugin._profiles(self, operation, name, state, confirmed)
+
+    async def _profiles(self, operation='list', name='', state=None, confirmed=False):
         if operation not in ('list', 'get', 'set', 'apply', 'del'):
             return {'ok': False, 'error': '配置操作无效'}
         if operation in ('apply', 'del') and not confirmed:
@@ -203,6 +258,26 @@ class Plugin:
         if operation != 'list':
             endpoint += '?' + urlencode({'profile': name})
         try:
+            if operation == 'apply':
+                # HHD profile/apply waits on a shared condition which may wake
+                # on unrelated events and return the *previous* configuration.
+                # Read the saved profile, then use verified setting writes.
+                saved = await asyncio.to_thread(request, 'GET', 'profile/get?' + urlencode({'profile': name}))
+                schema = await asyncio.to_thread(request, 'GET', 'settings')
+                changes = [
+                    {'path': path, 'value': get_path(saved, path)}
+                    for path, node in definitions(schema).items()
+                    if node['type'] in ('bool', 'int', 'multiple', 'discrete')
+                    and not any(t in node.get('tags', []) for t in ('hide', 'hidden'))
+                    and get_path(saved, path) is not None
+                ]
+                if not changes:
+                    raise ValueError('配置中没有可应用的设置')
+                validate(schema, changes, max_changes=len(definitions(schema)))
+                result = None
+                for start in range(0, len(changes), 64):
+                    result = await asyncio.to_thread(Plugin._apply, self, changes[start:start + 64], False)
+                return {'ok': True, 'result': result['state']}
             data = state if operation == 'set' else None
             if operation == 'set':
                 if not isinstance(state, dict):
@@ -221,8 +296,9 @@ class Plugin:
                     value = get_path(state, path)
                     if value is not None:
                         selected.append({'path': path, 'value': value})
-                data = validate(schema, selected)
-            return {'ok': True, 'result': await asyncio.to_thread(request, 'POST' if data else 'GET', endpoint, data)}
+                data = validate(schema, selected, max_changes=len(definitions(schema)))
+            result = await asyncio.to_thread(request, 'POST' if data else 'GET', endpoint, data)
+            return {'ok': True, 'result': result}
         except Exception as e:
             return {'ok': False, 'error': str(e)}
 
