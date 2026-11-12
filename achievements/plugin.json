@@ -1,0 +1,9 @@
+{
+  "name": "Quick Achievements",
+  "author": "Local SteamOS integration",
+  "flags": [],
+  "publish": {
+    "tags": ["achievements"],
+    "description": "Read-only achievement browser for the current Steam game"
+  }
+}
