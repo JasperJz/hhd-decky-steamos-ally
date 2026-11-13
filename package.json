@@ -2,6 +2,19 @@
   "name": "hhd-decky-steamos-ally",
   "version": "0.3.0-local.1",
   "private": true,
+  "description": "Unofficial Decky frontend for Handheld Daemon (HHD) on SteamOS, maintained and device-tested for ROG Ally.",
+  "author": "Jasper Zhao",
+  "license": "BSD-3-Clause",
+  "keywords": [
+    "decky",
+    "steam-deck",
+    "hhd",
+    "handheld-daemon",
+    "steamos",
+    "rog-ally",
+    "tdp",
+    "mangohud"
+  ],
   "scripts": {
     "build": "node tools/build.js",
     "test": "python -m unittest discover -s tests && node tests/test_frontend.js"

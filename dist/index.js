@@ -1,6 +1,12 @@
 (function (D, R) {
   'use strict';
   const h = R.createElement;
+  // Inherit Decky's active/inactive colors and stay crisp at sidebar size.
+  const logo = () => h('svg',{viewBox:'0 0 24 24',width:'1em',height:'1em',fill:'none',stroke:'currentColor',strokeWidth:1.7,strokeLinecap:'round',strokeLinejoin:'round','aria-label':'Handheld Daemon'},
+    h('path',{d:'M7.5 5.5h9a4 4 0 0 1 3.9 3.1l1.5 7a2.5 2.5 0 0 1-4.1 2.4L15 15.5H9L6.2 18a2.5 2.5 0 0 1-4.1-2.4l1.5-7a4 4 0 0 1 3.9-3.1Z'}),
+    h('path',{d:'M6.5 9v4M4.5 11h4M12.5 8l-2 4h3l-2 4'}),
+    h('circle',{cx:17,cy:10,r:.8,fill:'currentColor',stroke:'none'}),
+    h('circle',{cx:19,cy:12,r:.8,fill:'currentColor',stroke:'none'}));
   const button = (props,...children) => h(D.DialogButton,{...props,style:{width:"100%",minWidth:0,maxWidth:"100%",boxSizing:"border-box",whiteSpace:"normal",marginBottom:8}},...children);
   const maintenance = new Set(['hhd.settings.update_stable', 'hhd.settings.update_beta']);
   const controls = new Set(['bool', 'int', 'multiple', 'discrete', 'action', 'mode']);
@@ -289,6 +295,6 @@
       if(!['__profiles','__diagnostics'].includes(category))top.push(h(D.PanelSection,{key:'refresh'},h(D.PanelSectionRow,null,button({disabled:busy,onClick:()=>refresh(true)},'刷新当前状态'))));
       return h('div',{key:category,'data-hhd-page':category,style:{padding:'0 8px 12px'}},top);
     }
-    return {title:h('div',{className:D.staticClasses.Title},'Handheld Daemon'),content:h(Content),icon:h('span',null,'HHD'),onDismount(){colorDisposed=true;colorRestorePending=false;for(const hook of colorHooks){try{hook?.unregister();}catch(e){console.warn('[HHD color] unregister',e.message);}}}};
+    return {title:h('div',{className:D.staticClasses.Title},'Handheld Daemon'),content:h(Content),icon:logo(),onDismount(){colorDisposed=true;colorRestorePending=false;for(const hook of colorHooks){try{hook?.unregister();}catch(e){console.warn('[HHD color] unregister',e.message);}}}};
   });
 })(DFL, SP_REACT);

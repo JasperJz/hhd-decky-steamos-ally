@@ -33,6 +33,10 @@
 
 “后台接受”不等于所有硬件都可直接读回。TDP、CPU boost、风扇等另有硬件读数；RGB 的实际颜色仍需肉眼确认。
 
+## 截图
+
+暂无。真实运行截图待补（不会用生成图片替代）。
+
 ## 输入服务如何协作
 
 控制器由 **HHD 核心后台**处理，Decky 插件负责显示与修改配置。在已验证的掌机配置中，`hhd-power.service` 启动前临时停止并屏蔽 `inputplumber.service`，停止后解除临时屏蔽并恢复 InputPlumber。
@@ -52,6 +56,8 @@ node tests/test_frontend.js
 `index.js` 是前端源码，构建复制到 `dist/index.js`。`main.py` 是 Decky Python 后端。测试中的 schema 来自已验证版本，state 使用默认值生成，不包含用户真实配置。
 
 ## 安装插件
+
+安装前提：设备上已有可用的 HHD 后台。HHD 的安装与配置请遵循其上游文档（https://github.com/hhd-dev/hhd ）；SteamOS 上没有官方一键安装方式。本仓库 `maintenance/` 脚本只适用于下方“已验证环境”描述的特定版本组合，不是通用安装器。安装 ZIP 不会安装 HHD、adjustor、系统服务，也不会配置 InputPlumber。
 
 ### Decky 本地 ZIP 安装（推荐）
 
@@ -75,6 +81,20 @@ sudo bash tools/install.sh
 脚本只安装插件，并在覆盖已有插件前创建备份。默认 Decky 目录为 `/home/deck/homebrew`，可用 `DECKY_HOME` 指定。安装后需重新加载此插件或通过 Decky 设置重启加载器；后者可能重新加载 Steam 界面，不建议在游戏中进行。
 
 不安装 HHD 系统服务、不修改输入服务、不设置自启动、不修改用户硬件配置。完整 HHD 后台应单独配置。
+
+## 界面已安装但连不上后台
+
+界面能打开但报「HHD 后台未响应：…」或「插件连接超时」时，按顺序检查：
+
+1. HHD 后台是否在运行：`systemctl status hhd-power`（或你实际使用的 HHD 服务）。
+2. 套接字是否存在：`ls -l /run/hhd/api`。文件不存在说明 HHD 未运行或未以该方式暴露 API；本插件只通过这个本机 UNIX socket 通信，不支持 HHD 的 HTTP/token 模式。
+3. Decky 的 legacy Python 插件后端是否正常：本插件使用 legacy IIFE / Python 调用接口，目标 Decky 版本移除该接口时插件将无法工作；可在 Decky 开发者选项或 `journalctl` 中查看插件 Python 错误。
+4. 是否有两个控制器驱动同时接管手柄（HHD 与 InputPlumber 冲突），参见上文「输入服务如何协作」。
+5. 使用屏幕调色时 Gamescope 未就绪只会影响调色，不影响设置读写；调色相关报错见插件内「屏幕色彩」页面状态行。
+
+## 卸载
+
+在 Decky 设置中卸载 Handheld Daemon。若启用过屏幕调色，请先在插件中关闭调色（必要时再启用 Screen Colors）。插件在插件目录之外创建的文件需手动清理：`/home/deck/.config/hhd-decky-color/`（调色配置与 LUT 缓存）和 `/home/deck/.cache/hhd-mako-hud/`（MAKO 采样数据）。MangoHud 配置文件会保留修改前的备份（`output-hud.conf.before-hhd-manager`）。
 
 ## 维护已验证的 HHD 后台
 
@@ -117,6 +137,69 @@ sudo systemctl restart hhd-power
 
 保留原 Decky 插件的许可证，见 [LICENSE](LICENSE)。HHD/adjustor 的设置定义与兼容性修改遵循各自上游许可，见 [NOTICE.md](NOTICE.md) 和 `licenses/`。
 
-上游项目：[HHD](https://github.com/hhd-dev/hhd)、[adjustor](https://github.com/hhd-dev/adjustor)。
+上游项目：[HHD](https://github.com/hhd-dev/hhd)、[adjustor](https://github.com/hhd-dev/adjustor)；原 Decky 插件上游（已归档）：[hhd-dev/hhd-decky](https://github.com/hhd-dev/hhd-decky)。
+
+本仓库的开发与文档过程使用了 LLM 辅助生成和修改部分代码与文本；发布内容以仓库源码为准。
 
 MAKO FPS 由 Decky 后端每秒采样并原子写入短文本，MangoHud 只执行 cat 读取，避免其约 50ms 的命令读取窗口漏读 Python 输出。仅在监控和合并 FPS 都启用时采样；关闭或卸载后停止采样。无新采样时显示 `FPS -- → --`。
+
+---
+
+# English
+
+**HHD Decky for SteamOS / ROG Ally** is an unofficial, community-maintained Decky frontend for [Handheld Daemon (HHD)](https://github.com/hhd-dev/hhd). It renders the HHD backend's settings with native Steam controls and talks to HHD over the local UNIX socket `/run/hhd/api` — no second daemon, no idle polling, no token handling.
+
+- **This is not the official HHD plugin.** The upstream plugin [hhd-dev/hhd-decky](https://github.com/hhd-dev/hhd-decky) is archived; this repository continues that role with an independently rewritten backend and frontend under the same BSD 3-Clause license. The plugin keeps the name `Handheld Daemon` because Decky identifies installed plugins by that name; renaming would strand existing installs without updates.
+- **The ZIP installs the plugin only.** It does not install HHD or adjustor, add system services, or configure InputPlumber. A running HHD backend is required.
+
+## Verified environment
+
+- ROG Ally RC71L; SteamOS 3.8.28 (initial verification) and 3.9.5 (re-verification 2026-10-24, see `docs/`).
+- HHD 4.1.12 and adjustor 4.0.1 in a user venv; HHD API at `/run/hhd/api`.
+- Other devices and versions are unverified. The UI is generated from the backend's settings definitions, so the available controls depend on your device and HHD version.
+
+## Features
+
+- Power: TDP, short-term power limit, CPU boost, GPU frequency, fan curves, charge limit; automatic custom-mode switch and hardware-limit checks.
+- RGB and controller settings, including advanced boot/charge lighting options offered by the backend.
+- Profile save / apply / delete with two-step confirmation for destructive actions.
+- Performance page: 57 MangoHud overlay items grouped by category, applied live without restarting the game; merged MAKO raw → output FPS display for frame-gen diagnosis.
+- Screen color grading (native / natural / vivid / soft presets plus manual control) applied through a Gamescope 17³ LUT, with event-hooked restore on plugin load, Steam startup, mode changes, game start/exit and wake. Independent config in `~/.config/hhd-decky-color/`, with first-run import from the Screen Colors plugin (disable Screen Colors before enabling this feature).
+- Settings definitions cached per backend version; status polled only while the plugin page is mounted.
+
+## Prerequisite: HHD backend
+
+Install and configure HHD first, following the upstream documentation: https://github.com/hhd-dev/hhd . SteamOS has no official one-click HHD installer; the environment this repository was verified on is listed above. The `maintenance/` scripts in this repo target that verified version combination only — they are not a general-purpose installer. Do not let two services (for example InputPlumber and HHD) take over the same controller at the same time, and avoid running a second plugin that continuously writes TDP/fan.
+
+## Install from a ZIP
+
+1. Download `hhd-decky-<version>.zip` from [Releases](https://github.com/JasperJz/hhd-decky-steamos-ally/releases) — not GitHub's auto-generated "Source code" archive. Verify against `SHA256SUMS`.
+2. Copy the ZIP to the handheld's Downloads folder.
+3. Decky → Settings → enable Developer Mode → Developer → Install plugin from ZIP → select the file.
+4. Alternatively use Decky's install-from-URL with the ZIP's direct download link (the repository is public).
+5. Open "Handheld Daemon" in the Quick Access menu and check that the backend connects.
+
+## Update and uninstall
+
+- Update: install the newer ZIP over the existing plugin (same plugin name), or pick the newer version if you browse this repository through the Decky Plugins Extended custom store.
+- Uninstall from Decky settings. If screen color grading is enabled, disable it first. For a full cleanup, remove `/home/deck/.config/hhd-decky-color/` and `/home/deck/.cache/hhd-mako-hud/`; your pre-existing MangoHud config backup (`output-hud.conf.before-hhd-manager`) is kept.
+
+## Troubleshooting: the UI installs but cannot reach the backend
+
+The plugin shows 「HHD 后台未响应：…」(backend not responding) or 「插件连接超时」(timeout) when the backend is unreachable. Check in order:
+
+1. Is the HHD backend running? `systemctl status hhd-power` (or your HHD service).
+2. Does the socket exist? `ls -l /run/hhd/api`. If it is missing, HHD is not running or does not expose its API there — this plugin only speaks to that local UNIX socket and does not support HHD's HTTP/token mode.
+3. Is Decky's legacy Python plugin backend working? This plugin uses the legacy IIFE / Python calling convention; if a future Decky version removes it, the plugin stops working. Plugin Python errors show up in Decky's developer options or `journalctl`.
+4. Are two controller drivers fighting over the gamepad (HHD vs InputPlumber)? See the input-service notes in the Chinese section above.
+5. Gamescope not being ready only affects color grading, not settings read/write; color errors are shown on the plugin's color page status row.
+
+## Screenshots
+
+Not yet available — real-device screenshots are to be added. No generated mockups are used.
+
+## Limitations and status
+
+- Device verification covers ROG Ally RC71L on SteamOS 3.8.28 / 3.9.5 with HHD 4.1.12 + adjustor 4.0.1 (records in `docs/`). Color-grading restore hooks depend on Steam/Decky interfaces that vary by version.
+- Development of this repository was assisted by an LLM for code and documentation; what ships is the reviewed source in this repository.
+- License: BSD 3-Clause carried over from the original plugin (see [LICENSE](LICENSE)). HHD (LGPL-2.1-or-later) and adjustor (GPL-3.0) materials follow their upstream licenses; see [NOTICE.md](NOTICE.md) and `licenses/`.

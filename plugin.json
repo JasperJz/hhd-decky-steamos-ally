@@ -1,12 +1,15 @@
 {
   "name": "Handheld Daemon",
-  "author": "Local HHD integration",
+  "author": "Jasper Zhao",
   "flags": [
     "root"
   ],
   "publish": {
-    "tags": [],
-    "description": "Decky frontend for hhd (Handheld Daemon)",
-    "image": "https://opengraph.githubassets.com/1/SteamDeckHomebrew/PluginLoader"
+    "tags": [
+      "utility",
+      "performance"
+    ],
+    "description": "Unofficial Decky frontend for Handheld Daemon (HHD): power, fan, RGB, controller and performance overlay controls on SteamOS. Requires a running HHD backend. Verified on ROG Ally.",
+    "image": "https://raw.githubusercontent.com/JasperJz/hhd-decky-steamos-ally/main/assets/store-banner.png"
   }
 }
